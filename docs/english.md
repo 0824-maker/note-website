@@ -1,0 +1,10 @@
+# 通用英语三
+## 第1单元
+-翻译：
+Jillian Whiting (Journalist and Media Trainer): I think one of my most memorable teachers is my grade 10 English teacher, Mr. Rud. He treated us like young adults. He encouraged us to, you know, look at the bigger picture ... to develop an opinion, to have a voice.
+Karni Liddell (Paralympian and Motivational Speaker): My health and physical education teacher, she actually changed all the different sporting elements to integrate me into the curriculum, which was quite, I guess, forward-thinking and innovative in the 90s to have someone with a disability playing touch football and someone with a disability playing netball but she always made me feel like I could do it, even though I really couldn’t.
+Professor Ian Frazer: My most inspiring teacher was my physics teacher in high school, Spike, by nickname, simply because he let me do what I wanted to do in learning.
+Holly Ferling (Cricketer): My deputy principal at my high school was one of our closest family friends, and he helped me with everything with cricket, with all my techniques, and everything like that. He was always training with me.
+Wesley Enoch (Artistic Director): In high school, the most inspiring teacher was Morag Morrison. She was my drama teacher. And I had a really big voice; I was a big, yelly student. And she said, “You can come and be in the school drama play.” And off I went. And she kind of just kept encouraging me to try out what theatre could be.
+Naomi Price (Performer): The teacher that inspired me the most was my high school drama teacher, Miss Uren. She was also my English teacher, and she instilled in me an amazing love for language and theatre and I’ll always be grateful to her.
+Beryl Friday (Netballer): The teacher that inspired me the most was probably my Year Five to Seven teacher, so it was the same one for all those years. She just made learning really fun and I really enjoyed going to school every day to the point where, if I was sick, I would be really sad that I was missing out on going. So, yeah, she really made learning fun at my school.
