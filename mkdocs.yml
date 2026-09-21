@@ -1,4 +1,5 @@
 site_name: 信管专业课程笔记
+site_url: https://0824-maker.github.io/note-website/
 theme:
   name: material
   palette:
