@@ -1,6 +1,6 @@
 # 通用英语三
 ## 第1单元
--表达：
+-英语表达：
 Jillian Whiting (Journalist and Media Trainer): I think one of my most memorable teachers is my grade 10 English teacher, Mr. Rud. He treated us like young adults. He encouraged us to, you know, look at the bigger picture ... to develop an opinion, to have a voice.
 Karni Liddell (Paralympian and Motivational Speaker): My health and physical education teacher, she actually changed all the different sporting elements to integrate me into the curriculum, which was quite, I guess, forward-thinking and innovative in the 90s to have someone with a disability playing touch football and someone with a disability playing netball but she always made me feel like I could do it, even though I really couldn’t.
 Professor Ian Frazer: My most inspiring teacher was my physics teacher in high school, Spike, by nickname, simply because he let me do what I wanted to do in learning.
