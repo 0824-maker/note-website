@@ -1,0 +1,54 @@
+site_name: 信管专业课程笔记
+site_url: https://0824-maker.github.io/note-website/
+site_description: 按学科知识形态自动整理的课程笔记站
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: 切换到深色模式
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: 切换到浅色模式
+  icon:
+    logo: material/notebook-outline
+
+nav:
+  - 首页: index.md
+  - 方案对比: research.md
+  - 课程笔记:
+      - 毛概: mg.md
+      - 信息网络化基础: xxwlh.md
+      - 通用英语三: english.md
+      - 计算机程序设计原理: jsj.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
