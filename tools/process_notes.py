@@ -35,11 +35,20 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+# AI 增强层（可选）：Ollama 不可用时自动降级为纯规则模式，脚本不会报错
+try:
+    from ai_helper import generate_chapter_summary, is_available as ai_available
+except ImportError:                       # 兼容从项目根目录直接运行的情况
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from ai_helper import generate_chapter_summary, is_available as ai_available
+
 # ---------------------------------------------------------------- 路径配置
 ROOT = Path(__file__).resolve().parent.parent
 SRC_DIR = ROOT / "notes_raw"            # 原始笔记（只读，不动）
 OUT_DIR = ROOT / "docs"                 # 处理后直接写入站点目录
 BUILD_DIR = ROOT / "build_index"        # 检索索引
+
+USE_AI = False                          # 运行时由 main() 检测后赋值
 
 # ---------------------------------------------------------------- 学科档案
 # 每门课的"个性化处理策略"就定义在这里 —— 这是本项目区别于通用工具的核心
@@ -336,6 +345,62 @@ PROCESSORS = {
 }
 
 
+# ---------------------------------------------------------------- AI 增强
+def split_chapters(content: str):
+    """
+    把整理后的正文按二级标题（## xxx）切成若干章节。
+    返回 [(章节标题, 章节正文), ...]；没有 ## 时整体作为一章。
+    """
+    lines = content.split("\n")
+    chapters = []
+    cur_title = None
+    buf = []
+
+    for ln in lines:
+        if re.match(r"^##\s+", ln):
+            if cur_title is not None:
+                chapters.append((cur_title, "\n".join(buf).strip()))
+            cur_title = re.sub(r"^##\s+", "", ln).strip()
+            buf = []
+        else:
+            buf.append(ln)
+
+    if cur_title is not None:
+        chapters.append((cur_title, "\n".join(buf).strip()))
+    elif buf:
+        chapters.append(("全篇", "\n".join(buf).strip()))
+
+    return [(t, b) for t, b in chapters if b]
+
+
+def add_ai_summaries(subject_name: str, content: str, use_ai: bool) -> str:
+    """
+    在每一章的开头插入 AI 生成的「本章摘要 + 核心考点」。
+    AI 不可用或关闭时，原样返回。
+    """
+    if not use_ai:
+        return content
+
+    chapters = split_chapters(content)
+    if not chapters:
+        return content
+
+    out_parts = []
+    for title, body in chapters:
+        summary = generate_chapter_summary(subject_name, title, body)
+        out_parts.append(f"## {title}\n")
+        if summary:
+            # 用折叠块包裹，避免打断阅读；默认展开
+            out_parts.append(f'??? note "AI 章节摘要 · {title}"')
+            out_parts.append("")
+            for s_ln in summary.split("\n"):
+                out_parts.append(f"    {s_ln}" if s_ln.strip() else "")
+            out_parts.append("")
+        out_parts.append(body)
+        out_parts.append("")
+    return "\n".join(out_parts)
+
+
 # ---------------------------------------------------------------- 索引构建
 def build_index(all_processed: dict) -> list:
     """构建检索索引：每条知识点一条记录，供本地检索用。"""
@@ -366,6 +431,16 @@ def main():
     OUT_DIR.mkdir(exist_ok=True)
     BUILD_DIR.mkdir(exist_ok=True)
 
+    # --- 检测 AI 层是否可用（Ollama 未装/未启动则自动降级）---
+    global USE_AI
+    USE_AI = ai_available()
+    if USE_AI:
+        print(f"  [AI] 已连接本地 Ollama（模型：{os.environ.get('OLLAMA_MODEL', 'qwen2.5:3b')}）")
+    else:
+        print("  [AI] 未检测到 Ollama，降级为纯规则模式（功能不受影响，只是没有章节摘要）")
+        print("       如需启用：安装 Ollama 后执行  ollama serve  &&  ollama pull qwen2.5:3b")
+    print()
+
     report = []
     all_processed = {}
 
@@ -392,11 +467,16 @@ def main():
         processor = PROCESSORS.get(info["type"])
         body = processor(key, text) if processor else text
 
+        # --- AI 增强层：为每章生成「摘要 + 核心考点」---
+        if USE_AI:
+            body = add_ai_summaries(info["name"], body, use_ai=True)
+
         # --- 包装输出 ---
         header = (
             f"# {info['name']}\n\n"
             f"> 本页由 `tools/process_notes.py` 自动整理生成  \n"
             f"> 处理策略：{info['strategy']}  \n"
+            f"> AI 增强：{'已启用（本地 Ollama）' if USE_AI else '未启用（纯规则模式）'}  \n"
             f"> 生成时间：{datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n"
             f"---\n\n"
         )
