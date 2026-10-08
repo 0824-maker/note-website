@@ -249,7 +249,7 @@ def api_publish():
     """构建静态站点（等价于 mkdocs build）。"""
     try:
         r = subprocess.run(
-            ["mkdocs", "build"], cwd=str(ROOT),
+            [sys.executable, "-m", "mkdocs", "build"], cwd=str(ROOT),
             capture_output=True, timeout=300, text=True,
         )
         return jsonify({

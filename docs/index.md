@@ -1,6 +1,6 @@
 # 信管专业课程笔记
 
-> 一个**按学科特点自动整理**的课程笔记站 —— 不是把笔记堆在一起，而是让每一科都按它自己的知识形态重新组织。
+> 一个**按学科特点自动整理**的课程笔记站 —— 不是把笔记堆在一起，而是让每一科都按它自己的知识形态重新组织。整理过程由**本地 AI 智能体**自动完成。
 
 ## 这个站点解决什么问题
 
@@ -13,7 +13,7 @@
 | 学科差异被抹平 | 四科用同一种列表方式硬塞 | 毛概的问答、计网的公式、英语的语料全部一个样 |
 | 无法检索 | 只能 Ctrl+F 翻列表 | 考前想按知识点查找很痛苦 |
 
-## 我的解法
+## 我的解法：学科感知的智能体
 
 用 `tools/process_notes.py` 做**学科感知的智能整理**，针对每科知识形态走不同策略：
 
@@ -24,20 +24,35 @@
 | 通用英语三 | 长语料 | 按单元切分，长句按句号断行，便于精读 |
 | 计算机程序设计原理 | 代码 | 自动识别代码片段，加语法高亮 |
 
+在此基础上，**AI 层**（本地 Ollama 大模型）为每一章自动生成「本章摘要 + 核心考点」——页面上各章开头的折叠块就是 AI 写的。
+
+## 本站的三层进化
+
+| 版本 | 能力 | 解决的问题 |
+|---|---|---|
+| v1 发布站 | Obsidian + MkDocs 把笔记搬上网 | "发布"（用现成模板） |
+| v2 规则整理 | process_notes.py 按学科形态自动重构内容 | "整理"（自研） |
+| v3 智能体 | 本地网页应用 + AI 层：粘贴乱笔记 → AI 判学科 → 自动整理 + 生成章节摘要 → 一键入库发布 | "智能"（自研） |
+
+详见 [方案调研与差异化分析](research.md)。
+
 ## 使用方式
 
 ```bash
 # 安装依赖
-pip install mkdocs mkdocs-material pymdown-extensions
+pip install flask mkdocs mkdocs-material pymdown-extensions
 
-# ① 整理笔记（核心步骤）
-python3 tools/process_notes.py
+# ① 启动笔记智能体（网页版，推荐）
+python webapp/app.py          # 浏览器打开 http://127.0.0.1:5000
 
-# ② 本地预览
-mkdocs serve
+# ② 命令行整理（无 AI 也能跑）
+python tools/process_notes.py
 
-# ③ 构建发布
-mkdocs build
+# ③ 本地预览站点
+python -m mkdocs serve        # 浏览器打开 http://127.0.0.1:8000/note-website/
+
+# ④ 构建发布
+python -m mkdocs build
 ```
 
-更完整的方案调研与差异化分析，见 [方案对比](research.md)。
+> AI 功能依赖本地 [Ollama](https://ollama.com)：安装后执行 `ollama pull qwen2.5:3b` 即可；未安装时系统自动降级为纯规则模式，功能不中断。
